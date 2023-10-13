@@ -54,6 +54,14 @@ footer button {
     left: 5px;
 }
 
+.mouseHoverDark {
+    background-color: lightpink;
+}
+
+.mouseHoverLight {
+    background-color: lightcoral;
+}
+
 .player1 {
     background-color: red;
 }

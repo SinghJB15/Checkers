@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     renderBoard();
     renderDarkAndLightSquares();
-    // renderCheckerPeices();
+    renderCheckerPeices();
 })
 
 const renderBoard = () => {

@@ -33,5 +33,12 @@ footer button {
 .square {
     width: 40px;
     height: 40px;
-    background-color: lightgray;
+}
+
+.dark {
+    background-color: black;
+}
+
+.light {
+    background-color: whitesmoke;
 }

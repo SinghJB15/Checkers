@@ -4,7 +4,8 @@ class Checkers {
     this.renderDarkAndLightSquares();
     this.renderCheckerPeices();
     this.mouseHover();
-    this.moveBlackPeices();
+    this.selectedPeice = null;
+    this.onBoardClick();
   }
   renderBoard() {
     const board = document.querySelector("#board");
@@ -56,10 +57,14 @@ class Checkers {
         if (row < 3) {
           const peice = document.createElement("div");
           peice.classList.add("peice", "player1");
+          peice.dataset.row = row;
+          peice.dataset.col = col;
           square.appendChild(peice);
         } else if (row > 4) {
           const peice = document.createElement("div");
           peice.classList.add("peice", "player2");
+          peice.dataset.row = row;
+          peice.dataset.col = col;
           square.appendChild(peice);
         }
       }
@@ -81,31 +86,30 @@ class Checkers {
     });
   }
 
-  handlePieceClick(event) {
-    const clickedPiece = event.target;
-    const parentSquare = clickedPiece.parentElement;
-    const row = parentSquare.dataset.row;
-    const col = parentSquare.dataset.col;
-    //test
-    console.log(`Piece clicked at row: ${row}, col: ${col}`)
-    
-  }
-  
+ 
+ onBoardClick() {
+  const squares = document.querySelectorAll(".square");
+  squares.forEach((square) => {
+    square.addEventListener("click", (event) => {
+      event.preventDefault();
+      if(event.target.classList.contains("peice")) {
+        this.selectedPeice = event.target;
+        console.log("Clicked Peice", this.selectedPeice);
+      } else {
+        const squareTile = event.target;
+        console.log("Clicked Sqaure", squareTile)
+      }
 
-  moveBlackPeices() {
-   const pieces = document.querySelectorAll(".player2");
-   pieces.forEach((piece) => {
-    piece.addEventListener("click", (event) => {
-        this.handlePieceClick(event);
-    });
-   })
-  }
+    })
+  })
+ }
 
-  
+
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const startGame = new Checkers();
+  const newGame = new Checkers();
 });
 
 // document.addEventListener("DOMContentLoaded", () => {
@@ -189,3 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
 //     }
 //   });
 // };
+
+
+

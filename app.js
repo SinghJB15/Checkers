@@ -4,9 +4,11 @@ class Checkers {
     this.renderDarkAndLightSquares();
     this.renderCheckerPeices();
     this.mouseHover();
-    this.selectedPeice = null;
     this.onBoardClick();
+    this.selectedPeice = null;
+    // this.targetSquare = null;
   }
+  
   renderBoard() {
     const board = document.querySelector("#board");
 
@@ -86,26 +88,47 @@ class Checkers {
     });
   }
 
- 
- onBoardClick() {
-  const squares = document.querySelectorAll(".square");
-  squares.forEach((square) => {
-    square.addEventListener("click", (event) => {
-      event.preventDefault();
-      if(event.target.classList.contains("peice")) {
-        this.selectedPeice = event.target;
-        console.log("Clicked Peice", this.selectedPeice);
-      } else {
-        const squareTile = event.target;
-        console.log("Clicked Sqaure", squareTile)
+  onBoardClick() {
+    const squares = document.querySelectorAll(".square");
+    squares.forEach((square) => {
+      square.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (event.target.classList.contains("peice")) {
+          this.selectedPeice = event.target;
+          console.log("Clicked Peice", this.selectedPeice);
+        } 
+        this.handleClick(event);
+      });
+    });
+  }
+
+  handleClick(event) {
+    // console.log(event.target);
+    const peiceRow = parseInt(this.selectedPeice.dataset.row);
+    const peiceCol = parseInt(this.selectedPeice.dataset.col);
+    const targetRow = parseInt(event.target.dataset.row);
+    const targetCol = parseInt(event.target.dataset.col);
+    if(this.selectedPeice.classList.contains("player2")) {
+      if(targetRow === peiceRow - 1 && (targetCol === peiceCol + 1) || (targetCol === peiceCol -1)) {
+        event.target.appendChild(this.selectedPeice);
+        //Update data of the moved peice
+        this.selectedPeice.dataset.row = targetRow;
+        this.selectedPeice.dataset.col = targetCol;
+        this.selectedPeice = null;
+        // this.targetSquare = null;
       }
-
-    })
-  })
- }
-
-
-
+    }
+    if(this.selectedPeice.classList.contains("player1")) {
+      if(targetRow === peiceRow + 1 && (targetCol === peiceCol + 1) || (targetCol === peiceCol -1)) {
+        event.target.appendChild(this.selectedPeice);
+        //Update data of the moved peice
+        this.selectedPeice.dataset.row = targetRow;
+        this.selectedPeice.dataset.col = targetCol;
+        this.selectedPeice = null;
+        // this.targetSquare = null;
+      }
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -193,6 +216,3 @@ document.addEventListener("DOMContentLoaded", () => {
 //     }
 //   });
 // };
-
-
-

@@ -91,11 +91,11 @@ class Checkers {
     peices.forEach((peice) => {
       peice.addEventListener("mouseover", () => {
         peice.classList.add("mouseOverPeice");
-      })
+      });
       peice.addEventListener("mouseout", () => {
-        peice.classList.remove("mouseOverPeice")
-      })
-    })
+        peice.classList.remove("mouseOverPeice");
+      });
+    });
   }
 
   onBoardClick() {
@@ -106,47 +106,61 @@ class Checkers {
         if (event.target.classList.contains("peice")) {
           this.selectedPeice = event.target;
           console.log("Clicked Peice", this.selectedPeice);
+        } else if (this.selectedPeice) {
+          // Only try to handle a move if a piece is selected.
+          this.handleClick(event);
         }
-        this.handleClick(event);
       });
     });
   }
 
-  handleClick(event) {
-    // console.log(event.target);
+  extractPositions(event) {
     const peiceRow = parseInt(this.selectedPeice.dataset.row);
     const peiceCol = parseInt(this.selectedPeice.dataset.col);
     const targetRow = parseInt(event.target.dataset.row);
     const targetCol = parseInt(event.target.dataset.col);
-    if (event.target.children.length === 0) {
-      if (this.selectedPeice.classList.contains("player2")) {
-        if (
-          targetRow === peiceRow - 1 && ((targetCol === peiceCol + 1) ||
-          (targetCol === peiceCol - 1))
-        ) {
-          event.target.appendChild(this.selectedPeice);
-          //Update data of the moved peice
-          this.selectedPeice.dataset.row = targetRow;
-          this.selectedPeice.dataset.col = targetCol;
-          this.selectedPeice = null;
-          // this.targetSquare = null;
-        }
-      }
-      if (this.selectedPeice.classList.contains("player1")) {
-        if (
-          targetRow === peiceRow + 1 && ((targetCol === peiceCol + 1) ||
-          (targetCol === peiceCol - 1))
-        ) {
-          event.target.appendChild(this.selectedPeice);
-          //Update data of the moved peice
-          this.selectedPeice.dataset.row = targetRow;
-          this.selectedPeice.dataset.col = targetCol;
-          this.selectedPeice = null;
-          // this.targetSquare = null;
-        }
-      }
+    return { peiceRow, peiceCol, targetRow, targetCol };
+  }
+
+  validateMove(peiceRow, peiceCol, targetRow, targetCol) {
+    //Check player2 move
+    if (this.selectedPeice.classList.contains("player2")) {
+      return (
+        targetRow === peiceRow - 1 &&
+        (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
+      );
+    } //Check player 1 move
+    else if (this.selectedPeice.classList.contains("player1")) {
+      return (
+        targetRow === peiceRow + 1 &&
+        (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
+      );
     } else {
-      alert("Cannot move here");
+      return false; //in valid mode
+    }
+  }
+
+  executeMove(target) {
+    target.appendChild(this.selectedPeice);
+    this.selectedPeice.dataset.row = target.dataset.row;
+    this.selectedPeice.dataset.col = target.dataset.col;
+    this.selectedPeice = null;
+  }
+
+  invalidMove() {
+    alert("This is an invalid move!");
+  }
+
+  handleClick(event) {
+    const { peiceRow, peiceCol, targetRow, targetCol } =
+      this.extractPositions(event);
+    if (
+      event.target.children.length === 0 &&
+      this.validateMove(peiceRow, peiceCol, targetRow, targetCol)
+    ) {
+      this.executeMove(event.target);
+    } else {
+      this.invalidMove();
     }
   }
 }

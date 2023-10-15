@@ -140,12 +140,55 @@ class Checkers {
     }
   }
 
+  captureMove(event) {
+    const { peiceRow, peiceCol, targetRow, targetCol } = this.extractPositions(event);
+
+    //Determine direction of movement
+    let rowDirection, colDirection;
+    if(targetRow - peiceRow > 0) {
+      rowDirection = 1
+    } else {
+      rowDirection = -1;
+    }
+    if(targetCol - peiceCol > 0) {
+      colDirection = 1; 
+    } else {
+      colDirection = -1
+    }
+
+    //Determine oponents square
+    const opponentRow = peiceRow + rowDirection;
+    const opponentCol = peiceCol + colDirection;
+
+    const opponentSquare = document.querySelector(`[data-row='${opponentRow}'][data-col='${opponentCol}']`)
+
+    //Validate the opponent's square
+    if(this.selectedPeice.classList.contains("player2")){
+      if(opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player1")) {
+      opponentSquare.removeChild(opponentSquare.firstElementChild);
+      this.executeMove(event.target)
+    } else {
+      //Invalid capture move
+      this.invalidMove();
+    }
+  }
+  if(this.selectedPeice.classList.contains("player1")) {
+    if(opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player2")) {
+      opponentSquare.removeChild(opponentSquare.firstElementChild);
+      this.executeMove(event.target);
+    }
+  } else {
+    this.invalidMove();
+  }
+  }
+
   executeMove(target) {
     target.appendChild(this.selectedPeice);
     this.selectedPeice.dataset.row = target.dataset.row;
     this.selectedPeice.dataset.col = target.dataset.col;
     this.selectedPeice = null;
   }
+
 
   invalidMove() {
     alert("This is an invalid move!");
@@ -154,14 +197,19 @@ class Checkers {
   handleClick(event) {
     const { peiceRow, peiceCol, targetRow, targetCol } =
       this.extractPositions(event);
-    if (
-      event.target.children.length === 0 &&
-      this.validateMove(peiceRow, peiceCol, targetRow, targetCol)
-    ) {
-      this.executeMove(event.target);
-    } else {
-      this.invalidMove();
+    //Validate target has no children elements (no checker peice) 
+    if(event.target.children.length !== 0) {
+      return this.invalidMove();
     }
+    //Normal checker move
+    if(this.validateMove(peiceRow, peiceCol, targetRow, targetCol)) {
+      return this.executeMove(event.target)
+    }
+    //Capture move validation
+    if(Math.abs(targetRow - peiceRow) === 2) {
+      return this.captureMove(event);
+    }
+    return this.invalidMove();
   }
 }
 

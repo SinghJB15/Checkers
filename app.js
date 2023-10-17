@@ -6,6 +6,9 @@ class Checkers {
     this.mouseHover();
     this.onBoardClick();
     this.selectedPeice = null;
+    this.black = 0;
+    this.red = 0;
+    this.currentTurn = "player2";
     // this.targetSquare = null;
   }
 
@@ -125,12 +128,14 @@ class Checkers {
   validateMove(peiceRow, peiceCol, targetRow, targetCol) {
     //Check player2 move
     if (this.selectedPeice.classList.contains("player2")) {
+      this.currentTurn = "player1";
       return (
         targetRow === peiceRow - 1 &&
         (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
       );
     } //Check player 1 move
     else if (this.selectedPeice.classList.contains("player1")) {
+      this.currentTurn = "player2";
       return (
         targetRow === peiceRow + 1 &&
         (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
@@ -164,22 +169,28 @@ class Checkers {
 
     //Validate the opponent's square
     if(this.selectedPeice.classList.contains("player2")){
-      if(opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player1")) {
+      if(targetRow === peiceRow - 2 && opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player1")) {
       opponentSquare.removeChild(opponentSquare.firstElementChild);
-      this.executeMove(event.target)
+      this.executeMove(event.target);
+      this.black++;
+      this.updateUI();
+      this.currentTurn = "player1";
     } else {
       //Invalid capture move
       this.invalidMove();
     }
   }
   if(this.selectedPeice.classList.contains("player1")) {
-    if(opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player2")) {
+    if(targetRow === peiceRow + 2 && opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player2")) {
       opponentSquare.removeChild(opponentSquare.firstElementChild);
       this.executeMove(event.target);
+      this.red++;
+      this.updateUI();
+      this.currentTurn = "player2";
+    } else {
+      this.invalidMove();
     }
-  } else {
-    this.invalidMove();
-  }
+  } 
   }
 
   executeMove(target) {
@@ -198,6 +209,10 @@ class Checkers {
     const { peiceRow, peiceCol, targetRow, targetCol } =
       this.extractPositions(event);
     //Validate target has no children elements (no checker peice) 
+
+    if (!this.selectedPeice.classList.contains(this.currentTurn)) {
+      return alert("not your current turn");
+    }
     if(event.target.children.length !== 0) {
       return this.invalidMove();
     }
@@ -210,6 +225,10 @@ class Checkers {
       return this.captureMove(event);
     }
     return this.invalidMove();
+  }
+
+  updateUI() {
+    document.querySelector("#captures").innerHTML = `Red: ${this.red} | Black:${this.black}`
   }
 }
 

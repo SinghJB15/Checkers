@@ -9,6 +9,7 @@ class Checkers {
     this.black = 0;
     this.red = 0;
     this.currentTurn = "player2";
+    this.currentPlayer = "black";
     // this.targetSquare = null;
   }
 
@@ -128,14 +129,12 @@ class Checkers {
   validateMove(peiceRow, peiceCol, targetRow, targetCol) {
     //Check player2 move
     if (this.selectedPeice.classList.contains("player2")) {
-      this.currentTurn = "player1";
       return (
         targetRow === peiceRow - 1 &&
         (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
       );
     } //Check player 1 move
     else if (this.selectedPeice.classList.contains("player1")) {
-      this.currentTurn = "player2";
       return (
         targetRow === peiceRow + 1 &&
         (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
@@ -169,24 +168,22 @@ class Checkers {
 
     //Validate the opponent's square
     if(this.selectedPeice.classList.contains("player2")){
-      if(targetRow === peiceRow - 2 && opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player1")) {
+      if(targetRow === peiceRow - 2 && (targetCol === peiceCol + 2 || targetCol === peiceCol - 2 ) && opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player1")) {
       opponentSquare.removeChild(opponentSquare.firstElementChild);
-      this.executeMove(event.target);
       this.black++;
-      this.updateUI();
-      this.currentTurn = "player1";
+      this.executeMove(event.target);
+      return;
     } else {
       //Invalid capture move
       this.invalidMove();
     }
   }
   if(this.selectedPeice.classList.contains("player1")) {
-    if(targetRow === peiceRow + 2 && opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player2")) {
+    if(targetRow === peiceRow + 2 && (targetCol === peiceCol + 2 || targetCol === peiceCol - 2 ) && opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player2")) {
       opponentSquare.removeChild(opponentSquare.firstElementChild);
+      this.red++
       this.executeMove(event.target);
-      this.red++;
-      this.updateUI();
-      this.currentTurn = "player2";
+      return;
     } else {
       this.invalidMove();
     }
@@ -198,6 +195,8 @@ class Checkers {
     this.selectedPeice.dataset.row = target.dataset.row;
     this.selectedPeice.dataset.col = target.dataset.col;
     this.selectedPeice = null;
+    this.updateScoreUI();
+    this.updateUI();
   }
 
 
@@ -227,8 +226,20 @@ class Checkers {
     return this.invalidMove();
   }
 
+  updateScoreUI() {
+    document.querySelector("#captures").innerHTML = `Red: ${this.red} | Black: ${this.black}`
+  }
+
   updateUI() {
-    document.querySelector("#captures").innerHTML = `Red: ${this.red} | Black:${this.black}`
+    if(this.currentPlayer === "black") {
+      this.currentPlayer = "red";
+      this.currentTurn = "player1"
+      document.querySelector("#current-player").innerHTML = `Player: ${this.currentPlayer}`;
+    } else if(this.currentPlayer === "red") {
+      this.currentPlayer = "black";
+      this.currentTurn = "player2";
+      document.querySelector("#current-player").innerHTML = `Player: ${this.currentPlayer}`;
+    }
   }
 }
 

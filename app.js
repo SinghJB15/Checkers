@@ -127,6 +127,14 @@ class Checkers {
   }
 
   validateMove(peiceRow, peiceCol, targetRow, targetCol) {
+    //Check if a peice is a king
+    if(this.selectedPeice.dataset.type === "king") {
+      return (
+        (targetRow === peiceRow - 1 || targetRow === peiceRow + 1) && 
+        (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
+      )
+    }
+
     //Check player2 move
     if (this.selectedPeice.classList.contains("player2")) {
       return (
@@ -194,6 +202,7 @@ class Checkers {
     target.appendChild(this.selectedPeice);
     this.selectedPeice.dataset.row = target.dataset.row;
     this.selectedPeice.dataset.col = target.dataset.col;
+    this.checkKing();
     this.selectedPeice = null;
     this.updateScoreUI();
     this.updateUI();
@@ -224,6 +233,24 @@ class Checkers {
       return this.captureMove(event);
     }
     return this.invalidMove();
+  }
+
+  checkKing() {
+    if(this.selectedPeice.classList.contains("player2")) {
+      if(this.selectedPeice.dataset.row === "0") {
+        this.selectedPeice.dataset.type = "king";
+        console.log("Player 2 peice has been kinged!")
+        return;
+      }
+    } else if(this.selectedPeice.classList.contains("player1")) {
+      if(this.selectedPeice.dataset.row === "7") {
+        this.selectedPeice.dataset.type = "king";
+        console.log("Player 1 peice has been kinged")
+        return;
+      }
+    } else {
+      return false;
+    }
   }
 
   updateScoreUI() {

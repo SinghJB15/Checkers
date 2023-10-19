@@ -6,8 +6,8 @@ class Checkers {
     this.mouseHover();
     this.onBoardClick();
     this.selectedPeice = null;
-    this.black = 0;
-    this.red = 0;
+    this.black = 12;
+    this.red = 12;
     this.currentTurn = "player2";
     this.currentPlayer = "black";
     // this.targetSquare = null;
@@ -128,11 +128,11 @@ class Checkers {
 
   validateMove(peiceRow, peiceCol, targetRow, targetCol) {
     //Check if a peice is a king
-    if(this.selectedPeice.dataset.type === "king") {
+    if (this.selectedPeice.dataset.type === "king") {
       return (
-        (targetRow === peiceRow - 1 || targetRow === peiceRow + 1) && 
+        (targetRow === peiceRow - 1 || targetRow === peiceRow + 1) &&
         (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
-      )
+      );
     }
 
     //Check player2 move
@@ -152,52 +152,6 @@ class Checkers {
     }
   }
 
-  captureMove(event) {
-    const { peiceRow, peiceCol, targetRow, targetCol } = this.extractPositions(event);
-
-    //Determine direction of movement
-    let rowDirection, colDirection;
-    if(targetRow - peiceRow > 0) {
-      rowDirection = 1
-    } else {
-      rowDirection = -1;
-    }
-    if(targetCol - peiceCol > 0) {
-      colDirection = 1; 
-    } else {
-      colDirection = -1
-    }
-
-    //Determine oponents square
-    const opponentRow = peiceRow + rowDirection;
-    const opponentCol = peiceCol + colDirection;
-
-    const opponentSquare = document.querySelector(`[data-row='${opponentRow}'][data-col='${opponentCol}']`)
-
-    //Validate the opponent's square
-    if(this.selectedPeice.classList.contains("player2")){
-      if(targetRow === peiceRow - 2 && (targetCol === peiceCol + 2 || targetCol === peiceCol - 2 ) && opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player1")) {
-      opponentSquare.removeChild(opponentSquare.firstElementChild);
-      this.black++;
-      this.executeMove(event.target);
-      return;
-    } else {
-      //Invalid capture move
-      this.invalidMove();
-    }
-  }
-  if(this.selectedPeice.classList.contains("player1")) {
-    if(targetRow === peiceRow + 2 && (targetCol === peiceCol + 2 || targetCol === peiceCol - 2 ) && opponentSquare && opponentSquare.firstElementChild && opponentSquare.firstElementChild.classList.contains("player2")) {
-      opponentSquare.removeChild(opponentSquare.firstElementChild);
-      this.red++
-      this.executeMove(event.target);
-      return;
-    } else {
-      this.invalidMove();
-    }
-  } 
-  }
-
   executeMove(target) {
     target.appendChild(this.selectedPeice);
     this.selectedPeice.dataset.row = target.dataset.row;
@@ -208,7 +162,6 @@ class Checkers {
     this.updateUI();
   }
 
-
   invalidMove() {
     alert("This is an invalid move!");
   }
@@ -216,36 +169,36 @@ class Checkers {
   handleClick(event) {
     const { peiceRow, peiceCol, targetRow, targetCol } =
       this.extractPositions(event);
-    //Validate target has no children elements (no checker peice) 
+    //Validate target has no children elements (no checker peice)
 
     if (!this.selectedPeice.classList.contains(this.currentTurn)) {
       return alert("not your current turn");
     }
-    if(event.target.children.length !== 0) {
+    if (event.target.children.length !== 0) {
       return this.invalidMove();
     }
     //Normal checker move
-    if(this.validateMove(peiceRow, peiceCol, targetRow, targetCol)) {
-      return this.executeMove(event.target)
+    if (this.validateMove(peiceRow, peiceCol, targetRow, targetCol)) {
+      return this.executeMove(event.target);
     }
     //Capture move validation
-    if(Math.abs(targetRow - peiceRow) === 2) {
+    if (Math.abs(targetRow - peiceRow) === 2) {
       return this.captureMove(event);
     }
     return this.invalidMove();
   }
 
   checkKing() {
-    if(this.selectedPeice.classList.contains("player2")) {
-      if(this.selectedPeice.dataset.row === "0") {
+    if (this.selectedPeice.classList.contains("player2")) {
+      if (this.selectedPeice.dataset.row === "0") {
         this.selectedPeice.dataset.type = "king";
-        console.log("Player 2 peice has been kinged!")
+        console.log("Player 2 peice has been kinged!");
         return;
       }
-    } else if(this.selectedPeice.classList.contains("player1")) {
-      if(this.selectedPeice.dataset.row === "7") {
+    } else if (this.selectedPeice.classList.contains("player1")) {
+      if (this.selectedPeice.dataset.row === "7") {
         this.selectedPeice.dataset.type = "king";
-        console.log("Player 1 peice has been kinged")
+        console.log("Player 1 peice has been kinged");
         return;
       }
     } else {
@@ -254,19 +207,107 @@ class Checkers {
   }
 
   updateScoreUI() {
-    document.querySelector("#captures").innerHTML = `Red: ${this.red} | Black: ${this.black}`
+    document.querySelector(
+      "#captures"
+    ).innerHTML = `Red: ${this.red} | Black: ${this.black}`;
   }
 
   updateUI() {
-    if(this.currentPlayer === "black") {
+    if (this.currentPlayer === "black") {
       this.currentPlayer = "red";
-      this.currentTurn = "player1"
-      document.querySelector("#current-player").innerHTML = `Player: ${this.currentPlayer}`;
-    } else if(this.currentPlayer === "red") {
+      this.currentTurn = "player1";
+      document.querySelector(
+        "#current-player"
+      ).innerHTML = `Player: ${this.currentPlayer}`;
+    } else if (this.currentPlayer === "red") {
       this.currentPlayer = "black";
       this.currentTurn = "player2";
-      document.querySelector("#current-player").innerHTML = `Player: ${this.currentPlayer}`;
+      document.querySelector(
+        "#current-player"
+      ).innerHTML = `Player: ${this.currentPlayer}`;
     }
+  }
+
+  captureMove(event) {
+    const { peiceRow, peiceCol, targetRow, targetCol } =
+      this.extractPositions(event);
+
+    //Determine direction of movement
+    let rowDirection, colDirection;
+    if (targetRow - peiceRow > 0) {
+      rowDirection = 1;
+    } else {
+      rowDirection = -1;
+    }
+    if (targetCol - peiceCol > 0) {
+      colDirection = 1;
+    } else {
+      colDirection = -1;
+    }
+
+    //Determine Opponent's Square
+    const opponentRow = peiceRow + rowDirection;
+    const opponentCol = peiceCol + colDirection;
+    const opponentSquare = document.querySelector(
+      `[data-row='${opponentRow}'][data-col='${opponentCol}']`
+    );
+
+    if (!opponentSquare || !opponentSquare.firstElementChild) {
+      return this.invalidMove();
+    }
+
+    const opponentPeice = opponentSquare.firstElementChild;
+
+    //Handle King's movement and capturing
+    if (
+      this.selectedPeice.dataset.type === "king" &&
+      (targetRow === peiceRow - 2 || targetRow === peiceRow + 2) &&
+      (targetCol === peiceCol - 2 || targetCol === peiceCol + 2)
+    ) {
+      if (
+        (this.selectedPeice.classList.contains("player1") &&
+          opponentPeice.classList.contains("player2")) ||
+        (this.selectedPeice.classList.contains("player2") &&
+          opponentPeice.classList.contains("player1"))
+      ) {
+        this.capturePeice(opponentSquare, opponentPeice);
+        this.executeMove(event.target);
+        return;
+      }
+    } 
+    //Handle Regular Movements
+    if (
+      this.selectedPeice.classList.contains("player1") &&
+      targetRow === peiceRow + 2 &&
+      (targetCol === peiceCol + 2 || targetCol === peiceCol - 2) &&
+      opponentPeice.classList.contains("player2")
+    ) {
+      this.capturePeice(opponentSquare, opponentPeice);
+      this.executeMove(event.target);
+      return;
+    } 
+
+    if (
+      this.selectedPeice.classList.contains("player2") &&
+      targetRow === peiceRow - 2 &&
+      (targetCol === peiceCol + 2 || targetCol === peiceCol - 2) &&
+      opponentPeice.classList.contains("player1")
+    ) {
+      this.capturePeice(opponentSquare, opponentPeice);
+      this.executeMove(event.target);
+      return;
+    } 
+
+    this.invalidMove();
+  }
+
+  capturePeice(opponentSquare, opponentPeice) {
+    if (opponentPeice.classList.contains("player1")) {
+      this.red--;
+    } else {
+      this.black--;
+    }
+    opponentSquare.removeChild(opponentPeice);
   }
 }
 

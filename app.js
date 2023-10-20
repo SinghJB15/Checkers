@@ -422,6 +422,17 @@ class Checkers {
   invalidMove() {
     alert("This is an invalid move");
   }
+
+  //Check win condition
+  winCondition() {
+    if(this.black === 0) {
+      alert("Player 1 has WON!");
+      return;
+    } else if(this.red === 0) {
+      alert("Player 2 has WON!");
+      return;
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {

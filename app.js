@@ -448,11 +448,15 @@ class Checkers {
     const notifcationElement = document.querySelector(".notification");
     const messageElement = document.querySelector("#other-message");
     messageElement.textContent = message;
-    notifcationElement.style.display = "flex";
+   
+    //Slide down the notification
+    notifcationElement.classList.remove("hide-notification");
+    notifcationElement.classList.add("show-notification");
 
-    //Hide the notification after 3 seconds 
+    //After 3 seconds slide up the notification
     setTimeout(() => {
-      notifcationElement.style.display = "none";
+      notifcationElement.classList.remove("show-notification");
+      notifcationElement.classList.add("hide-notification");
     }, 3000);
   }
 

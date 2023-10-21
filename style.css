@@ -181,3 +181,27 @@ button:hover {
 }
 
 
+@media (max-width: 768px) {
+    main {
+        width: 90%;
+        margin: 10px auto;
+        padding: 10px;
+    }
+
+    #board {
+        width: 90vw;
+        height: 90vw;
+    }
+
+    .square {
+        width: 11.25vw;
+        height: 11.25vw;
+    }
+
+    .peice {
+        width: 6.3vw;
+        height: 6.3vw;
+        top: 2.5vw;
+        left: 2.5vw;
+    }
+}

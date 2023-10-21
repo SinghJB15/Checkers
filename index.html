@@ -1,32 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
     <script src="./app.js" defer></script>
     <title>Checkers</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>Checkers</h1>
+      <h1>Checkers</h1>
     </header>
     <main>
-        <div id="info-panel">
-            <p id="current-player">Player: Black</p>
-            <p id="captures">Red: 12 | Black: 12</p>
-        </div>
-        <div id="notification" class="notification">
-            <p id="game-message"></p>
-            <p id="other-message"></p>
-            <button id="play-again">PLay Again</button>
-        </div>
-        <div id="board">
+      <div id="info-panel">
+        <p id="current-player">Player: Black</p>
+        <p id="captures">Red: 12 | Black: 12</p>
+      </div>
+      <div id="notification" class="notification">
+        <p id="game-message"></p>
+        <p id="other-message"></p>
+      </div>
+      <div id="board">
 
-        </div>
+      </div>
     </main>
     <footer>
-        <button id="instruction">Instructions</button>
+      <button id="restart-game">Restart Game</button>
+      <button id="instruction">Instructions</button>
     </footer>
-</body>
+    <div id="instructions-overlay" class="overlay">
+      <div class="instructions-box">
+        <h2>Instructions</h2>
+
+        <p>🎉 <strong>Welcome to Checkers Extravaganza!</strong> 🎉</p>
+        <p>
+          Get ready for an epic duel of wits and strategy. Gather your friends
+          and family for a face-off in this classic 2-player game.
+        </p>
+
+        <h3>Playing the Game</h3>
+        <ul>
+          <li>
+            🔴 <strong>Player 1 - The Red Ruler:</strong><br />
+            Command your crimson troops! Move your pieces diagonally downward,
+            charging towards victory.
+          </li>
+          <li>
+            ⚫ <strong>Player 2 - The Black Baron:</strong><br />
+            Lead your obsidian army upwards, moving with precision and grace.
+          </li>
+          <li>
+            👑 <strong>King Me!</strong><br />
+            Reach the opposite end, and watch your piece ascend to royalty,
+            gaining the power to move freely in both directions.
+          </li>
+        </ul>
+
+        <h3>Capturing Opponents</h3>
+        <p>
+          Leap over your rival's pieces diagonally, claiming them as your own.
+          Found an empty square after your jump? Look around; another opponent
+          might be waiting to be conquered! In the heat of a multi-jump, the
+          game will guide you towards your next victory jump.
+        </p>
+
+        <h3>Winning the Game</h3>
+        <p>
+          Remember, the game isn't over until one player captures all the pieces
+          of the other. Strategy is key!
+        </p>
+
+        <h3>Need a Break?</h3>
+        <p>
+          Hit the restart button anytime. Have fun and may the best strategist
+          win! 🥳
+        </p>
+      </div>
+    </div>
+  </body>
 </html>

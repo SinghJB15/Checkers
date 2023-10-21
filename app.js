@@ -7,6 +7,8 @@ class Checkers {
     this.mouseHoverSquare();
     this.mouseHoverPeice();
     this.onBoardClick();
+    this.restartGame();
+    this.instructions();
   }
 
   // Initialization Variables - Initial setup for gameplay
@@ -444,25 +446,9 @@ class Checkers {
     const playAgainButton = document.querySelector("#play-again");
   
     if(this.black === 0) {
-      gameMessage.textContent = "Player 1 has WON!";
-      playAgainButton.style.display = "block";
-      playAgainButton.addEventListener("click", () => {
-        this.resetGame();
-        gameMessage.textContent = '';
-        playAgainButton.style.display = "none";
-        // Optionally, you might want to remove the event listener to keep things clean.
-        playAgainButton.removeEventListener("click", this.resetGame);
-      });
+      gameMessage.textContent = "Player 1 has WON! To play again, click 'Restart Game'";
     } else if(this.red === 0) {
-      gameMessage.textContent = "Player 2 has WON!";
-      playAgainButton.style.display = "block";
-      playAgainButton.addEventListener("click", () => {
-        this.resetGame();
-        gameMessage.textContent = '';
-        playAgainButton.style.display = "none";
-        // Optionally, you might want to remove the event listener to keep things clean.
-        playAgainButton.removeEventListener("click", this.resetGame);
-      });
+      gameMessage.textContent = "Player 2 has WON! To play again, click 'Restart Game'";
     }
   }
   
@@ -474,6 +460,17 @@ class Checkers {
     this.renderCheckerPeices();
     this.mouseHoverPeice();
     this.updateScoreUI();
+    //Clear the game message
+    const gameMessage = document.querySelector("#game-message");
+    gameMessage.textContent = '';
+  }
+
+  //Restart game
+  restartGame() {
+    const restartButton = document.querySelector("#restart-game");
+    restartButton.addEventListener("click", () => {
+      this.resetGame();
+    });
   }
 
  //Clear the board 
@@ -483,6 +480,25 @@ class Checkers {
       if(square.firstElementChild) {
         square.removeChild(square.firstElementChild);
       }
+    })
+  }
+
+  //Instructions
+  instructions() {
+    const instructionButton = document.querySelector("#instruction");
+    const instructionOverlay = document.querySelector("#instructions-overlay");
+    const instructionBox = document.querySelector(".instructions-box");
+
+    instructionButton.addEventListener("click", () => {
+      instructionOverlay.style.display = "flex";
+    })
+
+    instructionOverlay.addEventListener("click", () => {
+      instructionOverlay.style.display = "none";
+    })
+
+    instructionBox.addEventListener("click", () => {
+      event.stopPropagation();
     })
   }
 }

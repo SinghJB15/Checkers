@@ -1,7 +1,7 @@
 # Checkers
 
 #### This is my first project "CHECKERS"! Based on the classic game!
-<img src="./images/screenshot#1.png" alt="checker screen"/>
+<img src="./images/screenshot-homepage.png" alt="checker screen"/>
 
 ## Description
 Welcome to my debut in web-based game development. The goal was to create a vibrant rendition of the classic 2-player checkers game in a web-based application. 
@@ -34,7 +34,7 @@ Welcome to my debut in web-based game development. The goal was to create a vibr
 
 
 ## <a name="howtoplay"></a>How To Play
-<img src="./images/screenshot#2.png" alt="checker screen"/>
+<img src="./images/screenshot-instructions.png" alt="checker screen"/>
 
 
 ## <a name="nextsteps"></a>Project Next Steps
@@ -50,4 +50,4 @@ Welcome to my debut in web-based game development. The goal was to create a vibr
     
 
 ## <a name="author"></a>About The Author
-I build applications and mini projects tied to my various interests. I look for creative solutions to real world problems and think of technical ways to address them. While no application is ever perfect I find joy in the process and all my final products!
+I'm a software engineer who loves to learn and grow. I enjoy building applications that align with my interests, but I'm also ready to take on challenging projects that test my skills. Every project I work on excites me and pushes me to do better in the ever-evolving tech world.

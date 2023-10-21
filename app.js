@@ -402,26 +402,39 @@ class Checkers {
   //Update UI
   updateScoreUI() {
     document.querySelector(
-      "#captures"
-    ).innerHTML = `Red: ${this.red} | Black: ${this.black}`;
+      "#player1-info"
+    ).innerHTML = `Player 1: Red |${this.red}`;
+
+    document.querySelector(
+      "#player2-info"
+    ).innerHTML = `Player 2: Black |${this.black}`
   }
+
+  updateUI() {
+    document.querySelector("#current-player").innerHTML = `Current Player: ${this.currentPlayer}`
+  };
 
   //Switch turns
   switchTurn() {
+    let player1Info = document.querySelector("#player1-info");
+    let player2Info = document.querySelector("#player2-info");
+    let currentPlayerElem = document.querySelector("#current-player");
+
     if (this.currentPlayer === "black") {
-      this.currentPlayer = "red";
-      this.currentTurn = "player1";
-      document.querySelector(
-        "#current-player"
-      ).innerHTML = `Player: ${this.currentPlayer}`;
+        this.currentPlayer = "red";
+        this.currentTurn = "player1";
+        currentPlayerElem.innerHTML = `Current Player: ${this.currentPlayer}`;
+        player1Info.style.opacity = "1";  // Highlight Player 1
+        player2Info.style.opacity = "0.5";  // Fade out Player 2
     } else if (this.currentPlayer === "red") {
-      this.currentPlayer = "black";
-      this.currentTurn = "player2";
-      document.querySelector(
-        "#current-player"
-      ).innerHTML = `Player: ${this.currentPlayer}`;
+        this.currentPlayer = "black";
+        this.currentTurn = "player2";
+        currentPlayerElem.innerHTML = `Current Player: ${this.currentPlayer}`;
+        player1Info.style.opacity = "0.5";  // Fade out Player 1
+        player2Info.style.opacity = "1";  // Highlight Player 2
     }
-  }
+}
+
 
   //Invalid moves
   invalidMove() {
@@ -430,9 +443,10 @@ class Checkers {
 
   //Show notifications
   showNotification(message) {
-    const notifcationElement = document.querySelector("#other-message");
-    notifcationElement.textContent = message;
-    notifcationElement.style.display = "block";
+    const notifcationElement = document.querySelector(".notification");
+    const messageElement = document.querySelector("#other-message");
+    messageElement.textContent = message;
+    notifcationElement.style.display = "flex";
 
     //Hide the notification after 3 seconds 
     setTimeout(() => {
@@ -442,13 +456,10 @@ class Checkers {
 
   //Check win condition
   winCondition() {
-    const gameMessage = document.querySelector("#game-message");
-    const playAgainButton = document.querySelector("#play-again");
-  
     if(this.black === 0) {
-      gameMessage.textContent = "Player 1 has WON! To play again, click 'Restart Game'";
+     this.showNotification("Player 1 has WON! To play again, click 'Restart Game'");
     } else if(this.red === 0) {
-      gameMessage.textContent = "Player 2 has WON! To play again, click 'Restart Game'";
+      this.showNotification("Player 2 has WON! To play again, click 'Restart Game'");
     }
   }
   
@@ -460,9 +471,8 @@ class Checkers {
     this.renderCheckerPeices();
     this.mouseHoverPeice();
     this.updateScoreUI();
+    this.updateUI();
     //Clear the game message
-    const gameMessage = document.querySelector("#game-message");
-    gameMessage.textContent = '';
   }
 
   //Restart game

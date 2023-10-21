@@ -70,14 +70,15 @@ class Checkers {
 
       //Check if is the square is a dark square
       if ((row + col) % 2 === 0) {
-        //Place player 1 peices
         if (row < 3) {
+          //Place player 1 peices
           const peice = document.createElement("div");
           peice.classList.add("peice", "player1");
           peice.dataset.row = row;
           peice.dataset.col = col;
           square.appendChild(peice);
         } else if (row > 4) {
+          //Place player 2 peices
           const peice = document.createElement("div");
           peice.classList.add("peice", "player2");
           peice.dataset.row = row;
@@ -90,7 +91,7 @@ class Checkers {
 
   // Event Handling
 
-  // Highlighting the squares and peices
+  // Highlighting the dark squares when mouse hovers over them
   mouseHoverSquare() {
     const squares = document.querySelectorAll("#board .square");
     squares.forEach((square) => {
@@ -105,6 +106,7 @@ class Checkers {
     });
   }
 
+  //Highlighting the checker peices when mouse hovers over them
   mouseHoverPeice() {
     const peices = document.querySelectorAll("#board .peice");
     peices.forEach((peice) => {
@@ -113,8 +115,8 @@ class Checkers {
       });
       peice.addEventListener("mouseout", () => {
         peice.classList.remove("mouseOverPeice");
-      })
-    })
+      });
+    });
   }
 
   //On board click
@@ -140,8 +142,8 @@ class Checkers {
 
     const { peiceRow, peiceCol, targetRow, targetCol } =
       this.extractPositions(targetSquare);
-    //Validate target has no children elements (no checker peice)
 
+    //Validate target square has no children elements (no checker peice)
     if (!this.selectedPeice.classList.contains(this.currentTurn)) {
       return this.showNotification("not your current turn");
     }
@@ -178,8 +180,6 @@ class Checkers {
     return this.invalidMove();
   }
 
-  // Move Logic
-
   //Extract positions
   extractPositions(targetSquare) {
     const peiceRow = parseInt(this.selectedPeice.dataset.row);
@@ -189,7 +189,7 @@ class Checkers {
     return { peiceRow, peiceCol, targetRow, targetCol };
   }
 
-  //Validate move
+  //Validate move for normal movement of checker peices
   validateMove(peiceRow, peiceCol, targetRow, targetCol) {
     //Check if a peice is a king
     if (this.selectedPeice.dataset.type === "king") {
@@ -199,31 +199,21 @@ class Checkers {
       );
     }
 
-    //Check player2 move
+    //Check player 2
     if (this.selectedPeice.classList.contains("player2")) {
       return (
         targetRow === peiceRow - 1 &&
         (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
       );
-    } //Check player 1 move
+    } //Check player 1
     else if (this.selectedPeice.classList.contains("player1")) {
       return (
         targetRow === peiceRow + 1 &&
         (targetCol === peiceCol + 1 || targetCol === peiceCol - 1)
       );
     } else {
-      return false; //in valid mode
+      return false; //in valid move
     }
-  }
-
-  //Execute Move
-  executeMove(target) {
-    target.appendChild(this.selectedPeice);
-    this.selectedPeice.dataset.row = target.dataset.row;
-    this.selectedPeice.dataset.col = target.dataset.col;
-    this.checkKing();
-    this.updateScoreUI();
-    this.winCondition();
   }
 
   //Validate capture
@@ -274,7 +264,7 @@ class Checkers {
       }
     }
 
-    //Handle Regular Movements
+    //Handle regular capture movements
     if (
       this.selectedPeice.classList.contains("player1") &&
       targetRow === peiceRow + 2 &&
@@ -326,6 +316,7 @@ class Checkers {
 
       const opponentPeice = opponentSquare.firstElementChild;
 
+      //Update the score and remove the opponent peice from the opponent square
       this.capturePeice(opponentSquare, opponentPeice);
       this.executeMove(targetSquare);
       return true;
@@ -335,6 +326,7 @@ class Checkers {
 
   //Check for multi jumps
   checkForMultiJumps(currentSquare) {
+    //All available directions a peice can move
     const directions = [
       { row: 2, col: 2 },
       { row: 2, col: -2 },
@@ -352,11 +344,12 @@ class Checkers {
         `[data-row='${targetRow}'][data-col='${targetCol}']`
       );
 
-      //ensure target square is on the board
+      //Check if target square is on the board
       if (!targetSquare) {
         continue; //if targetSquare is null or undefined, do not proceed with rest of the code and skip to the next iteration
       }
 
+      //Check if target square is empty and that this move is valid by calling this.validCapture(targetSquare);
       if (
         !targetSquare.firstElementChild &&
         this.validateCapture(targetSquare)
@@ -366,6 +359,18 @@ class Checkers {
     }
     //if above all fails
     return false;
+  }
+
+  //Execute Move
+  executeMove(target) {
+    //Appened the checker peice to the target square
+    target.appendChild(this.selectedPeice);
+    //Update data attributes for the checker peice
+    this.selectedPeice.dataset.row = target.dataset.row;
+    this.selectedPeice.dataset.col = target.dataset.col;
+    this.checkKing();
+    this.updateScoreUI();
+    this.winCondition();
   }
 
   //Capture Peice
@@ -385,7 +390,7 @@ class Checkers {
     if (this.selectedPeice.classList.contains("player2")) {
       if (this.selectedPeice.dataset.row === "0") {
         this.selectedPeice.dataset.type = "king";
-        this.selectedPeice.classList.add("king")
+        this.selectedPeice.classList.add("king");
         console.log("Player 2 peice has been kinged!");
         return;
       }
@@ -401,7 +406,7 @@ class Checkers {
     }
   }
 
-  //Update UI
+  //Update score UI
   updateScoreUI() {
     document.querySelector(
       "#player1-info"
@@ -409,12 +414,15 @@ class Checkers {
 
     document.querySelector(
       "#player2-info"
-    ).innerHTML = `Player 2: Black |${this.black}`
+    ).innerHTML = `Player 2: Black |${this.black}`;
   }
 
+  //Update UI
   updateUI() {
-    document.querySelector("#current-player").innerHTML = `Current Player: ${this.currentPlayer}`
-  };
+    document.querySelector(
+      "#current-player"
+    ).innerHTML = `Current Player: ${this.currentPlayer}`;
+  }
 
   //Switch turns
   switchTurn() {
@@ -423,20 +431,19 @@ class Checkers {
     let currentPlayerElem = document.querySelector("#current-player");
 
     if (this.currentPlayer === "black") {
-        this.currentPlayer = "red";
-        this.currentTurn = "player1";
-        currentPlayerElem.innerHTML = `Current Player: ${this.currentPlayer}`;
-        player1Info.style.opacity = "1";  // Highlight Player 1
-        player2Info.style.opacity = "0.5";  // Fade out Player 2
+      this.currentPlayer = "red";
+      this.currentTurn = "player1";
+      currentPlayerElem.innerHTML = `Current Player: ${this.currentPlayer}`;
+      player1Info.style.opacity = "1"; // Highlight Player 1
+      player2Info.style.opacity = "0.5"; // Fade out Player 2
     } else if (this.currentPlayer === "red") {
-        this.currentPlayer = "black";
-        this.currentTurn = "player2";
-        currentPlayerElem.innerHTML = `Current Player: ${this.currentPlayer}`;
-        player1Info.style.opacity = "0.5";  // Fade out Player 1
-        player2Info.style.opacity = "1";  // Highlight Player 2
+      this.currentPlayer = "black";
+      this.currentTurn = "player2";
+      currentPlayerElem.innerHTML = `Current Player: ${this.currentPlayer}`;
+      player1Info.style.opacity = "0.5"; // Fade out Player 1
+      player2Info.style.opacity = "1"; // Highlight Player 2
     }
-}
-
+  }
 
   //Invalid moves
   invalidMove() {
@@ -448,7 +455,7 @@ class Checkers {
     const notifcationElement = document.querySelector(".notification");
     const messageElement = document.querySelector("#other-message");
     messageElement.textContent = message;
-   
+
     //Slide down the notification
     notifcationElement.classList.remove("hide-notification");
     notifcationElement.classList.add("show-notification");
@@ -462,13 +469,16 @@ class Checkers {
 
   //Check win condition
   winCondition() {
-    if(this.black === 0) {
-     this.showNotification("Player 1 has WON! To play again, click 'Restart Game'");
-    } else if(this.red === 0) {
-      this.showNotification("Player 2 has WON! To play again, click 'Restart Game'");
+    if (this.black === 0) {
+      this.showNotification(
+        "Player 1 has WON! To play again, click 'Restart Game'"
+      );
+    } else if (this.red === 0) {
+      this.showNotification(
+        "Player 2 has WON! To play again, click 'Restart Game'"
+      );
     }
   }
-  
 
   //Reset Game
   resetGame() {
@@ -489,14 +499,14 @@ class Checkers {
     });
   }
 
- //Clear the board 
+  //Clear the board
   clearBoard() {
     const squares = document.querySelectorAll(".square");
     squares.forEach((square) => {
-      if(square.firstElementChild) {
+      if (square.firstElementChild) {
         square.removeChild(square.firstElementChild);
       }
-    })
+    });
   }
 
   //Instructions
@@ -507,19 +517,18 @@ class Checkers {
 
     instructionButton.addEventListener("click", () => {
       instructionOverlay.style.display = "flex";
-    })
+    });
 
     instructionOverlay.addEventListener("click", () => {
       instructionOverlay.style.display = "none";
-    })
+    });
 
     instructionBox.addEventListener("click", () => {
       event.stopPropagation();
-    })
+    });
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const newGame = new Checkers();
 });
-

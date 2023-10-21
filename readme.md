@@ -1,7 +1,7 @@
 # Checkers
 
 #### This is my first project "CHECKERS"! Based on the classic game!
-<img src="images/images/screenshot#1.png" alt="checker screen"/>
+<img src="./images/screenshot#1.png" alt="checker screen"/>
 
 ## Description
 Welcome to my debut in web-based game development. The goal was to create a vibrant rendition of the classic 2-player checkers game in a web-based application. 
@@ -34,7 +34,7 @@ Welcome to my debut in web-based game development. The goal was to create a vibr
 
 
 ## <a name="howtoplay"></a>How To Play
-<img src="images/images/screenshot#2.png" alt="checker screen"/>
+<img src="./images/screenshot#2.png" alt="checker screen"/>
 
 
 ## <a name="nextsteps"></a>Project Next Steps

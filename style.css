@@ -16,6 +16,29 @@ main {
     align-items: center;
 }
 
+.notfication {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f4f4f4;
+    text-align: center;
+    display: none;
+}
+
+#play-again {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: none;
+}
+
+#play-again:hover {
+    background-color: #d32f2f;
+}
+
 #board {
     display: grid;
     grid-template-columns: repeat(8, 1fr);

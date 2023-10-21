@@ -4,7 +4,8 @@ class Checkers {
     this.renderBoard();
     this.renderDarkAndLightSquares();
     this.renderCheckerPeices();
-    this.mouseHover();
+    this.mouseHoverSquare();
+    this.mouseHoverPeice();
     this.onBoardClick();
   }
 
@@ -88,10 +89,8 @@ class Checkers {
   // Event Handling
 
   // Highlighting the squares and peices
-  mouseHover() {
+  mouseHoverSquare() {
     const squares = document.querySelectorAll("#board .square");
-    const peices = document.querySelectorAll("#board .peice");
-
     squares.forEach((square) => {
       if (square.classList.contains("dark")) {
         square.addEventListener("mouseover", () => {
@@ -102,15 +101,18 @@ class Checkers {
         });
       }
     });
+  }
 
+  mouseHoverPeice() {
+    const peices = document.querySelectorAll("#board .peice");
     peices.forEach((peice) => {
       peice.addEventListener("mouseover", () => {
         peice.classList.add("mouseOverPeice");
       });
       peice.addEventListener("mouseout", () => {
         peice.classList.remove("mouseOverPeice");
-      });
-    });
+      })
+    })
   }
 
   //On board click
@@ -139,7 +141,7 @@ class Checkers {
     //Validate target has no children elements (no checker peice)
 
     if (!this.selectedPeice.classList.contains(this.currentTurn)) {
-      return alert("not your current turn");
+      return this.showNotification("not your current turn");
     }
     if (targetSquare.children.length !== 0) {
       return this.invalidMove();
@@ -157,7 +159,7 @@ class Checkers {
         //If a capture has occured, then check for potential mulit-jumps
         if (this.checkForMultiJumps(targetSquare)) {
           //If mulit jump is possible, notify user
-          alert("Another Capture is possible!");
+          this.showNotification("Another Capture is possible!");
           return; //do not switch turns
         } else {
           //no more captures are possible
@@ -421,29 +423,60 @@ class Checkers {
 
   //Invalid moves
   invalidMove() {
-    alert("This is an invalid move");
+    this.showNotification("This is an invalid move");
+  }
+
+  //Show notifications
+  showNotification(message) {
+    const notifcationElement = document.querySelector("#other-message");
+    notifcationElement.textContent = message;
+    notifcationElement.style.display = "block";
+
+    //Hide the notification after 3 seconds 
+    setTimeout(() => {
+      notifcationElement.style.display = "none";
+    }, 3000);
   }
 
   //Check win condition
   winCondition() {
+    const gameMessage = document.querySelector("#game-message");
+    const playAgainButton = document.querySelector("#play-again");
+  
     if(this.black === 0) {
-      showNotification("Player 1 has WON!");
-      this.resetGame();
-      return;
+      gameMessage.textContent = "Player 1 has WON!";
+      playAgainButton.style.display = "block";
+      playAgainButton.addEventListener("click", () => {
+        this.resetGame();
+        gameMessage.textContent = '';
+        playAgainButton.style.display = "none";
+        // Optionally, you might want to remove the event listener to keep things clean.
+        playAgainButton.removeEventListener("click", this.resetGame);
+      });
     } else if(this.red === 0) {
-      showNotification("Player 2 has WON!");
-      this.resetGame();
-      return;
+      gameMessage.textContent = "Player 2 has WON!";
+      playAgainButton.style.display = "block";
+      playAgainButton.addEventListener("click", () => {
+        this.resetGame();
+        gameMessage.textContent = '';
+        playAgainButton.style.display = "none";
+        // Optionally, you might want to remove the event listener to keep things clean.
+        playAgainButton.removeEventListener("click", this.resetGame);
+      });
     }
   }
+  
 
+  //Reset Game
   resetGame() {
     this.clearBoard();
-    this.black = 12;
-    this.red = 12;
+    this.initVariables();
     this.renderCheckerPeices();
+    this.mouseHoverPeice();
+    this.updateScoreUI();
   }
 
+ //Clear the board 
   clearBoard() {
     const squares = document.querySelectorAll(".square");
     squares.forEach((square) => {

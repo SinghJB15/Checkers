@@ -116,6 +116,13 @@ button:hover {
     left: 15px;
 }
 
+.king {
+    background-image: url("images/crown.png");
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .mouseHoverDark {
     background-color: lightpink;
 }

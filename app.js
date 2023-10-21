@@ -385,12 +385,14 @@ class Checkers {
     if (this.selectedPeice.classList.contains("player2")) {
       if (this.selectedPeice.dataset.row === "0") {
         this.selectedPeice.dataset.type = "king";
+        this.selectedPeice.classList.add("king")
         console.log("Player 2 peice has been kinged!");
         return;
       }
     } else if (this.selectedPeice.classList.contains("player1")) {
       if (this.selectedPeice.dataset.row === "7") {
         this.selectedPeice.dataset.type = "king";
+        this.selectedPeice.classList.add("king");
         console.log("Player 1 peice has been kinged");
         return;
       }

@@ -139,11 +139,11 @@ button:hover {
 }
 
 .mouseHoverDark {
-    background-color: lightpink;
+    background-color: #2b2b2b;
 }
 
 .mouseHoverLight {
-    background-color: lightcoral;
+    background-color: #f0f0f0;
 }
 
 .player1 {
@@ -155,7 +155,7 @@ button:hover {
 }
 
 .mouseOverPeice {
-    background-color: yellow;
+    background-color: #b8860b;
 }
 
 .overlay {
